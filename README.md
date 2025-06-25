@@ -1,0 +1,1 @@
+# projeto-pratico-mensageria-em-java-scd-2025-1
