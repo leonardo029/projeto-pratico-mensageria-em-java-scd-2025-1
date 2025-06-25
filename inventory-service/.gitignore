@@ -1,0 +1,43 @@
+# Diretórios de build
+/target/
+!/src/main/resources/
+
+# Arquivos temporários e de cache
+*.log
+*.tmp
+
+# Arquivos gerados pelo Maven Wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+# Arquivos específicos de SO
+.DS_Store
+Thumbs.db
+
+# Configurações de IDEs (opcional, se usar Git compartilhado)
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Arquivos do Eclipse
+.classpath
+.project
+.settings/
+
+# Arquivos do NetBeans
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Arquivos do IntelliJ
+out/
+
+# Arquivos do VS Code
+.vscode/
+
+# Outros
+*.class
