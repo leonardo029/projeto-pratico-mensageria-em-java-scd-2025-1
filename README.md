@@ -120,8 +120,8 @@ POST http://localhost:8080/orders
 
 ```bash
 curl -X POST http://localhost:8080/orders -H "Content-Type: application/json" -d '[
-  {"itemName": "Laptop", "quantity": 2},
-  {"itemName": "Mouse", "quantity": 1}
+  {"itemName": "Estojo", "quantity": 7},
+  {"itemName": "Pasta", "quantity": 3}
 ]'
 ```
 
