@@ -34,16 +34,9 @@ Este projeto implementa um sistema distribuído com três microsserviços:
 
 3.  **Notification-Service** (Consumidor) - Envia notificações com base em eventos de estoque
 
-### Diagramas de Classes dos Serviços
-
-![Diagrama Inventory Service](inventory-service-class-diagram.png)
-![Diagrama Notification Service](notification-service-class-diagram.png)
-![Diagrama Order Service](order-service-class-diagram.png)
-
 ### Fluxo de Mensagens
 
-  
-
+ 
 ```
 
 Order-Service → [tópico orders] → Inventory-Service → [tópico inventory-events] → Notification-Service
@@ -87,55 +80,6 @@ Order-Service → [tópico orders] → Inventory-Service → [tópico inventory-
 └── README.md # Este arquivo
 
 ```
-
-  
-
-## Esquema do Banco de Dados
-
-  
-
-### Tabela `orders`
-
-  
-
-```sql
-
-CREATE  TABLE  orders (
-
-id UUID PRIMARY KEY,
-
-created_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
-
-items JSONB NOT NULL
-
-);
-
-```
-
-  
-
-### Tabela `inventory`
-
-  
-
-```sql
-
-CREATE  TABLE  inventory (
-
-id SERIAL  PRIMARY KEY,
-
-item_name VARCHAR(255) UNIQUE  NOT NULL,
-
-quantity INTEGER  NOT NULL  DEFAULT  0,
-
-created_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
-
-updated_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP
-
-);
-
-```
-
   
 
 ## Primeiros Passos
@@ -162,53 +106,26 @@ updated_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP
 
 ```bash
 
-git  clone <url-do-repositorio>
+git  clone <git  clone <[url-do-repositorio](https://github.com/leonardo029/projeto-pratico-mensageria-em-java-scd-2025-1)>>
 
-cd  teste-elias
+cd  git  clone projeto-pratico-mensageria-em-java-scd-2025-1
 
 ```
 
   
 
-2.  **Subir a infraestrutura**
+2.  **Subir a infraestrutura e os microsserviços**
 
   
 
 ```bash
 
-docker-compose  up  -d  zookeeper  kafka  postgres-ecommerce
+docker-compose  up  -d 
 
 ```
 
-  
 
-3.  **Aguardar 30 segundos e criar os tópicos Kafka**
-
-  
-
-```bash
-
-chmod  +x  create-topics.sh
-
-./create-topics.sh
-
-```
-
-  
-
-4.  **Iniciar os microsserviços**
-
-  
-
-```bash
-
-docker-compose  up  -d  order-service  inventory-service  notification-service
-
-```
-
-  
-
-5.  **Verificar se os serviços estão rodando**
+3.  **Verificar se os serviços estão rodando**
 
   
 
@@ -217,12 +134,39 @@ docker-compose  up  -d  order-service  inventory-service  notification-service
 docker-compose  ps
 
 ```
+4.  **Criar os tópicos Kafka**
 
+```bash
+chmod  +x  create-topics.sh
+
+./create-topics.sh
+```
+5. **Verificar se os tópicos foram criados**
+```bash
+docker exec -it kafka bash
+
+kafka-topics --list --bootstrap-server localhost:9092
+```
   
 
 ### Testando o Sistema
 
   
+|Nome do Produto| Quantidade disponível |
+|--|--|
+| Lápis | 55 |
+| Borracha  | 100 |
+|Caderno| 75|
+|Bicicleta| 25|
+|Pasta| 80|
+|Mochila|33|
+|Estojo|45|
+
+**Endpoint:**
+
+```
+POST http://localhost:8080/orders
+```
 
 **Criar um pedido:**
 
@@ -278,7 +222,7 @@ curl  http://localhost:8080/orders
 
 ```bash
 
-curl  -X  POST  http://localhost:8080/orders  -H  "Content-Type: application/json"  -d  '[{"itemName": "Mouse", "quantity": 5}]'
+curl  -X  POST  http://localhost:8080/orders  -H  "Content-Type: application/json"  -d  '[{"itemName": "Borracha", "quantity": 5}]'
 
 ```
 
@@ -290,10 +234,61 @@ curl  -X  POST  http://localhost:8080/orders  -H  "Content-Type: application/jso
 
 ```bash
 
-curl  -X  POST  http://localhost:8080/orders  -H  "Content-Type: application/json"  -d  '[{"itemName": "Laptop", "quantity": 100}]'
+curl  -X  POST  http://localhost:8080/orders  -H  "Content-Type: application/json"  -d  '[{"itemName": "Lápis", "quantity": 100}]'
 
 ```
 
+## Diagramas de Classes dos Serviços
+
+![Diagrama Inventory Service](inventory-service-class-diagram.png)
+![Diagrama Notification Service](notification-service-class-diagram.png)
+![Diagrama Order Service](order-service-class-diagram.png)
+
+## Esquema do Banco de Dados
+
+  
+
+### Tabela `orders`
+
+  
+
+```sql
+
+CREATE  TABLE  orders (
+
+id UUID PRIMARY KEY,
+
+created_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+
+items JSONB NOT NULL
+
+);
+
+```
+
+  
+
+### Tabela `inventory`
+
+  
+
+```sql
+
+CREATE  TABLE  inventory (
+
+id SERIAL  PRIMARY KEY,
+
+item_name VARCHAR(255) UNIQUE  NOT NULL,
+
+quantity INTEGER  NOT NULL  DEFAULT  0,
+
+created_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP,
+
+updated_at TIMESTAMP  DEFAULT CURRENT_TIMESTAMP
+
+);
+
+```
   
 
 ## Funcionalidades do Sistema
@@ -499,49 +494,6 @@ docker  exec  -it  postgres-ecommerce  psql  -U  postgres  -d  ecommerce  -c  "S
 
 ```
 
-  
-
-## Desenvolvimento
-
-  
-
-### Rodar localmente
-
-  
-
-```bash
-
-cd  order-service
-
-./mvnw  spring-boot:run
-
-  
-
-cd  inventory-service
-
-./mvnw  spring-boot:run
-
-  
-
-cd  notification-service
-
-./mvnw  spring-boot:run
-
-```
-
-  
-
-**Antes, inicie a infraestrutura:**
-
-  
-
-```bash
-
-docker-compose  up  -d  zookeeper  kafka  postgres-ecommerce
-
-```
-
-  
 
 ## Destaques do Projeto
 
@@ -569,40 +521,3 @@ _Este projeto demonstra os conceitos principais de sistemas distribuídos, event
 
   
 
-## Resumo Rápido
-
-  
-
-**Rodar o sistema:**
-
-  
-
-```bash
-
-docker  compose  up  -d  kafka  inventory-service
-
-# espere alguns segundos
-
-docker  compose  up
-
-```
-
-  
-
-**Banco de dados acessível.**
-
-  
-
-**Ver logs:**
-
-  
-
-```bash
-
-docker  compose  logs  -f  order-service
-
-docker  compose  logs  -f  inventory-service
-
-docker  compose  logs  -f  notification-service
-
-```
