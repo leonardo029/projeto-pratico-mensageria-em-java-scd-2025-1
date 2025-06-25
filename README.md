@@ -106,7 +106,7 @@ Order-Service → [tópico orders] → Inventory-Service → [tópico inventory-
 
 ```bash
 
-git  clone <git  clone <[url-do-repositorio](https://github.com/leonardo029/projeto-pratico-mensageria-em-java-scd-2025-1)>>
+git  clone <git  clone https://github.com/leonardo029/projeto-pratico-mensageria-em-java-scd-2025-1.git
 
 cd  git  clone projeto-pratico-mensageria-em-java-scd-2025-1
 
